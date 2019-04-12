@@ -32,6 +32,13 @@ dependencies {
     //MiBand SDK
     implementation project(":miband-sdk-kotlin")
 
+    //Rx
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
+    implementation "io.reactivex.rxjava2:rxjava:2.2.6"
+
+    //Timber
+    implementation "com.jakewharton.timber:timber:4.7.1"
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0-alpha03'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha03'
