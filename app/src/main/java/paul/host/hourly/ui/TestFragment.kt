@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.khmelenko.lab.miband.MiBand
 import com.khmelenko.lab.miband.model.VibrationMode
+import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_test.*
 import paul.host.hourly.R
 import paulhost.sf.ui.base.BaseFragment
@@ -24,13 +25,17 @@ class TestFragment : BaseFragment() {
         miBand = context?.let { MiBand(it) }
 
         vibrate.setOnClickListener {
-            miBand?.startScan()
-                ?.flatMap { miBand?.connect(it.device) }
-                ?.flatMap { miBand?.startVibration(VibrationMode.VIBRATION_WITH_LED) }
-                ?.subscribe(
-                    { Timber.d("success") },
-                    { Timber.e(it) }
-                )
+            miBand?.let { mi ->
+                mi.startScan()
+                    .flatMap { mi.connect(it.device) }
+                    .flatMap {
+                        if (it) mi.startVibration(VibrationMode.VIBRATION_WITHOUT_LED)
+                        else Observable.error(Exception("Connection failed"))
+                    }
+            }?.subscribe(
+                { Timber.d("success") },
+                { Timber.e(it) }
+            )
         }
     }
 }
